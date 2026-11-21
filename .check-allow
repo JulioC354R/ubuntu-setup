@@ -1,0 +1,5 @@
+# Padrões (regex ERE) que scripts/check.sh NÃO deve tratar como dado pessoal.
+# Um por linha. Seja específico: cada entrada aqui é uma exceção à regra de privacidade.
+
+# UUIDs de extensões do GNOME (formato nome@autor, parecem e-mails mas são identificadores públicos)
+[A-Za-z0-9._-]+@(rastersoft\.com|ubuntu\.com|canonical\.com|neuromorph|shendrew\.github\.io|CoreCoding\.com|maniacx\.github\.com|patapon\.info|aunetx)

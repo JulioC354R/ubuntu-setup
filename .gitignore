@@ -1,0 +1,15 @@
+# Logs e estado nunca vão para o repo (ficam em ~/.local/state/ubuntu-setup)
+logs/
+*.log
+
+# Configuração pessoal e segredos
+local.env
+*.local
+.env
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Backups gerados por install_file
+*.bak-*
