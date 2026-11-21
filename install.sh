@@ -87,10 +87,22 @@ bootstrap_repo() {  # url dir
   fi
   if [[ -d "$dir/.git" ]]; then
     git -C "$dir" pull --ff-only -q </dev/null || echo "! Não foi possível atualizar; usando versão local." >&2
-  else
-    mkdir -p "$(dirname "$dir")"
-    git clone -q --depth 1 "$url" "$dir" </dev/null || { echo "✘ Falha ao clonar $url" >&2; return 1; }
+    return 0
   fi
+  # Clona ao lado e só depois troca: se a pasta já existir sem ser um clone, ela vira backup (nada é apagado)
+  local tmp bak
+  mkdir -p "$(dirname "$dir")"
+  tmp=$(mktemp -d "$dir.clone-XXXXXX") || return 1
+  if ! GIT_TERMINAL_PROMPT=0 git clone -q --depth 1 "$url" "$tmp" </dev/null; then
+    rmdir "$tmp" 2>/dev/null || rm -rf -- "${tmp:?}"
+    echo "✘ Falha ao clonar $url" >&2
+    return 1
+  fi
+  if [[ -e "$dir" ]]; then
+    bak="$dir.bak-$(date +%Y%m%d-%H%M%S)"
+    mv -- "$dir" "$bak" && echo "› Pasta existente guardada em ${bak/#$HOME/\~}"
+  fi
+  mv -- "$tmp" "$dir"
 }
 
 check_os() {

@@ -226,6 +226,13 @@ Repo público `github.com/JulioC354R/ubuntu-setup`. O usuário do GitHub entra n
 versionar e-mail, nome real, hostname etc. Fork: `SETUP_REPO_URL=https://github.com/<outro>/ubuntu-setup.git`.
 **Motivo:** o bootstrap em uma linha precisa de uma URL fixa.
 
+## 021 · 2026-11-21 · Bootstrap idempotente com pasta já existente
+Se `~/.local/share/ubuntu-setup` existir sem ser um clone (ex.: sobra de testes), o bootstrap clona numa pasta
+temporária ao lado, guarda a antiga como `ubuntu-setup.bak-AAAAMMDD-HHMMSS` e põe o clone no lugar. Nada é
+apagado. Já sendo um clone, só faz `git pull --ff-only`. Clone com `GIT_TERMINAL_PROMPT=0`, para nunca pedir
+usuário/senha no meio do `curl | bash`; se falhar, a pasta temporária é removida.
+**Motivo:** o `curl | bash` falhava com "destination path already exists" (relatado pelo usuário).
+
 ---
 
 ## Em aberto
