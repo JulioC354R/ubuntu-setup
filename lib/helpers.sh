@@ -246,6 +246,6 @@ load_local_env() {
 
 require_var() {  # NOME -> falha a etapa com mensagem clara se a variável não estiver definida
   [[ -n "${!1:-}" ]] && return 0
-  echo "Variável $1 não definida. Configure em $SETUP_LOCAL_ENV (veja config/local.env.example)." >&2
+  echo "Variável $1 não definida. Configure em ${SETUP_LOCAL_ENV/#$HOME/\~} (veja config/local.env.example)." >&2
   return 1
 }
