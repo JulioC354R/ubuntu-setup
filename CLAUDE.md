@@ -29,8 +29,8 @@ Histórico de decisões: [docs/decisoes.md](docs/decisoes.md).
 
 3. **Sem dados pessoais ou sensíveis**
    - Proibido versionar: nome, e-mail, usuário, hostname, IPs internos, tokens, senhas, chaves SSH/GPG.
-   - Valores pessoais vêm de `~/.config/ubuntu-setup/local.env` (fora do repo) ou de variáveis de ambiente.
-     No repo fica só o modelo `config/local.env.example` com valores fictícios.
+   - Valores pessoais (usuário e e-mail do GitHub) são perguntados no início do `install.sh`, antes do plano,
+     com `ui_ask` (lê de `/dev/tty`), ou vêm de variáveis de ambiente. Nunca ficam gravados no repo.
    - Logs ficam fora do repo (`~/.local/state/ubuntu-setup/logs/`) e caminhos exibidos usam `~`.
 
 4. **Erros não param a instalação**

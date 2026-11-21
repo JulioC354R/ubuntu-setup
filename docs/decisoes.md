@@ -233,6 +233,16 @@ apagado. Já sendo um clone, só faz `git pull --ff-only`. Clone com `GIT_TERMIN
 usuário/senha no meio do `curl | bash`; se falhar, a pasta temporária é removida.
 **Motivo:** o `curl | bash` falhava com "destination path already exists" (relatado pelo usuário).
 
+## 022 · 2026-11-21 · Fim do local.env: perguntas no início
+Removidos `config/local.env.example`, `load_local_env` e `require_var`. O `install.sh` pergunta, logo depois do
+cabeçalho e antes do sudo, o **usuário** e o **e-mail do GitHub** (`ui_ask`, lendo de `/dev/tty`, então funciona
+no `curl | bash`). Enter aceita o sugerido: o valor atual do Git ou, numa máquina nova, o e-mail anônimo
+`<id>+<usuário>@users.noreply.github.com` (o id vem da API pública do GitHub). O usuário do GitHub vira o
+`user.name`. Valida formato e tenta de novo até 3 vezes. Sem terminal, no `--dry-run` ou com
+`GIT_USER_NAME`/`GIT_USER_EMAIL` já definidos, não pergunta. Sem resposta e sem identidade prévia, a etapa falha
+com aviso. Substitui a parte do `local.env` das decisões 001 e 018.
+**Motivo:** pedido do usuário: um arquivo a menos para preparar antes de rodar o setup.
+
 ---
 
 ## Em aberto

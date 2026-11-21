@@ -1,19 +1,52 @@
 #!/usr/bin/env bash
 # modules/22-git.sh — identidade do Git e chave SSH.
-# Nome e e-mail NUNCA ficam no repo: vêm de ~/.config/ubuntu-setup/local.env
-# (GIT_USER_NAME / GIT_USER_EMAIL; modelo em config/local.env.example).
+# Usuário e e-mail do GitHub NUNCA ficam no repo: o install.sh pergunta no início (ask_git_identity),
+# antes do plano. Sem perguntar (automação): GIT_USER_NAME=... GIT_USER_EMAIL=... ./install.sh
 
 GIT_DEFAULT_BRANCH="${SETUP_GIT_DEFAULT_BRANCH:-main}"
 SSH_KEY="$HOME/.ssh/id_ed25519"
+GITHUB_USER_RE='^[A-Za-z0-9]([A-Za-z0-9-]{0,37}[A-Za-z0-9])?$'
+EMAIL_RE='^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$'
 
 __git_get() { git config --global --get "$1" 2>/dev/null || true; }
 
-# Com as variáveis definidas, confere se batem; sem elas, aceita a identidade que já existir.
+# E-mail anônimo do GitHub (<id>+<usuário>@users.noreply.github.com): não expõe o e-mail real em repos públicos
+github_noreply_email() {
+  local id
+  id=$(curl -fsSL --connect-timeout 5 "https://api.github.com/users/$1" 2>/dev/null | jq -r '.id // empty' 2>/dev/null)
+  [[ "$id" =~ ^[0-9]+$ ]] && printf '%s+%s@users.noreply.github.com' "$id" "$1"
+}
+
+# Chamado pelo install.sh antes do plano (não é uma etapa). Enter aceita o valor sugerido.
+ask_git_identity() {
+  local user="${GIT_USER_NAME:-}" email="${GIT_USER_EMAIL:-}" def
+  if [[ -z "$user" || -z "$email" ]] && ui_can_ask; then
+    printf '\n'
+    ui_info "GitHub: usado na identidade do Git e no comentário da chave SSH (Enter aceita o sugerido)"
+    if [[ -z "$user" ]]; then
+      def=$(__git_get user.name); [[ "$def" =~ $GITHUB_USER_RE ]] || def=""
+      ui_ask user "Usuário do GitHub" "$def" "$GITHUB_USER_RE" || true
+    fi
+    if [[ -z "$email" ]]; then
+      def=$(__git_get user.email)
+      [[ -z "$def" && -n "$user" ]] && def=$(github_noreply_email "$user")
+      ui_ask email "E-mail" "$def" "$EMAIL_RE" || true
+    fi
+    printf '\n'
+  fi
+  if [[ -n "$user" && -n "$email" ]]; then
+    export GIT_USER_NAME="$user" GIT_USER_EMAIL="$email"
+  else
+    unset GIT_USER_NAME GIT_USER_EMAIL
+  fi
+}
+
+# Com usuário/e-mail informados, confere se batem; sem eles, aceita a identidade que já existir.
 check_git_identity() {
   has_cmd git || return 1
   [[ "$(__git_get init.defaultBranch)" == "$GIT_DEFAULT_BRANCH" ]] || return 1
-  if [[ -n "${GIT_USER_NAME:-}" || -n "${GIT_USER_EMAIL:-}" ]]; then
-    [[ "$(__git_get user.name)" == "${GIT_USER_NAME:-}" && "$(__git_get user.email)" == "${GIT_USER_EMAIL:-}" ]]
+  if [[ -n "${GIT_USER_NAME:-}" ]]; then
+    [[ "$(__git_get user.name)" == "$GIT_USER_NAME" && "$(__git_get user.email)" == "$GIT_USER_EMAIL" ]]
   else
     [[ -n "$(__git_get user.name)" && -n "$(__git_get user.email)" ]]
   fi
@@ -21,14 +54,13 @@ check_git_identity() {
 
 step_git_identity() {
   git config --global init.defaultBranch "$GIT_DEFAULT_BRANCH"
-  if [[ -n "$(__git_get user.name)" && -n "$(__git_get user.email)" &&
-        -z "${GIT_USER_NAME:-}" && -z "${GIT_USER_EMAIL:-}" ]]; then
-    return 0   # já tem identidade e o local.env não pede outra
+  if [[ -n "${GIT_USER_NAME:-}" ]]; then
+    git config --global user.name "$GIT_USER_NAME"
+    git config --global user.email "$GIT_USER_EMAIL"
+  elif [[ -z "$(__git_get user.name)" || -z "$(__git_get user.email)" ]]; then
+    echo "Usuário e e-mail do GitHub não informados no início da instalação. Rode de novo e responda às perguntas." >&2
+    return 1
   fi
-  require_var GIT_USER_NAME
-  require_var GIT_USER_EMAIL
-  git config --global user.name "$GIT_USER_NAME"
-  git config --global user.email "$GIT_USER_EMAIL"
 }
 
 # Chave ed25519 sem senha (a instalação não pode pedir input). Para pôr senha depois:
@@ -45,5 +77,5 @@ step_ssh_key() {
 }
 
 plan_section "Git e SSH"
-plan_step --check check_git_identity "Identidade do Git (local.env) e branch padrão $GIT_DEFAULT_BRANCH" step_git_identity
+plan_step --check check_git_identity "Identidade do Git (GitHub) e branch padrão $GIT_DEFAULT_BRANCH" step_git_identity
 plan_step --check check_ssh_key "Chave SSH (ed25519)" step_ssh_key

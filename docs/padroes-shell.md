@@ -71,8 +71,8 @@ Chaves sempre pela URL oficial do fornecedor; nada de chave versionada no repo.
 
 ## 5. Privacidade
 
-- Nada pessoal no repo. Dados como nome e e-mail do git ficam em:
-  `~/.config/ubuntu-setup/local.env` (modelo em `config/local.env.example`).
+- Nada pessoal no repo. Dados como usuário e e-mail do GitHub são perguntados no início do `install.sh`
+  (`ui_ask`, lendo de `/dev/tty`, antes do plano) ou vêm de variáveis de ambiente (`GIT_USER_NAME`, `GIT_USER_EMAIL`).
 - Uma etapa que precisa de um dado pessoal ausente **pula com aviso** (falha com mensagem clara),
   sem perguntar interativamente.
 - `scripts/check.sh` procura e-mails, chaves privadas, tokens conhecidos e caminhos `/home/<usuario>`.

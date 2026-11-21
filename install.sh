@@ -47,7 +47,6 @@ main() {
 
   ui_init "$theme"
   check_os
-  load_local_env
 
   local m
   for m in "$setup_dir"/modules/*.sh; do
@@ -56,6 +55,7 @@ main() {
   done
 
   ui_header
+  (( UI_DRY_RUN )) || ask_git_identity   # modules/22-git.sh: usuário e e-mail do GitHub
   (( UI_DRY_RUN )) || ensure_sudo || return 1
   ui_run_plan
   ui_summary
@@ -69,6 +69,9 @@ Uso: install.sh [opções]
   --list-themes    mostra uma prévia de todos os temas
   --dry-run        só verifica: mostra o que já está ok e o que seria instalado
   -h, --help       esta ajuda
+
+No início, pergunta o usuário e o e-mail do GitHub (para o Git e a chave SSH).
+Sem perguntar: GIT_USER_NAME=... GIT_USER_EMAIL=... ./install.sh
 
 Variáveis: SETUP_THEME, SETUP_UI (panel | classic), SETUP_REPO_URL, SETUP_DIR, SETUP_LOG_DIR,
            NO_COLOR, SETUP_PLAIN

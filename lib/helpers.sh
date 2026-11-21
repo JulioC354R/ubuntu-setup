@@ -233,19 +233,3 @@ dconf_applied() {  # arquivo.ini -> 0 se todas as chaves já têm o valor do arq
     [[ "$(dconf read "/$section/$key")" == "$value" ]] || return 1
   done <"$1"
 }
-
-# ── config local (dados pessoais ficam fora do repo) ────────────────────────
-
-SETUP_LOCAL_ENV="${SETUP_LOCAL_ENV:-${XDG_CONFIG_HOME:-$HOME/.config}/ubuntu-setup/local.env}"
-
-load_local_env() {
-  # shellcheck source=/dev/null
-  [[ -f "$SETUP_LOCAL_ENV" ]] && source "$SETUP_LOCAL_ENV"
-  return 0
-}
-
-require_var() {  # NOME -> falha a etapa com mensagem clara se a variável não estiver definida
-  [[ -n "${!1:-}" ]] && return 0
-  echo "Variável $1 não definida. Configure em ${SETUP_LOCAL_ENV/#$HOME/\~} (veja config/local.env.example)." >&2
-  return 1
-}
