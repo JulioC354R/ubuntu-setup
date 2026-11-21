@@ -220,9 +220,14 @@ As outras extensões não foram reexportadas nesse passo.
 oficial, então a checagem compara a versão instalada com a última release e atualiza quando o setup roda.
 **Motivo:** acesso remoto, já usado nesta máquina.
 
+## 020 · 2026-11-21 · URL do repositório
+Repo público `github.com/JulioC354R/ubuntu-setup`. O usuário do GitHub entra no comando de bootstrap e no
+`SETUP_REPO_URL` padrão: é o endereço público do próprio repo, sem ele não há como baixar. Continua proibido
+versionar e-mail, nome real, hostname etc. Fork: `SETUP_REPO_URL=https://github.com/<outro>/ubuntu-setup.git`.
+**Motivo:** o bootstrap em uma linha precisa de uma URL fixa.
+
 ---
 
 ## Em aberto
 - Gerenciador de dotfiles (chezmoi, Stow ou só `install_file`)?
 - Shell (bash/zsh), editor e perfis (`minimal`, `dev`, `desktop`)?
-- URL definitiva do repositório (para o comando de bootstrap).

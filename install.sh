@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # install.sh — bootstrap em uma linha do ubuntu-setup.
 #
-#   curl -fsSL https://raw.githubusercontent.com/<usuario>/ubuntu-setup/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/JulioC354R/ubuntu-setup/main/install.sh | bash
 #   curl -fsSL .../install.sh | bash -s -- --theme nord
 #   ./install.sh [--theme NOME] [--list-themes] [--help]
 #
@@ -10,7 +10,7 @@
 set -uo pipefail
 
 main() {
-  local repo_url="${SETUP_REPO_URL:-https://github.com/SEU_USUARIO/ubuntu-setup.git}"
+  local repo_url="${SETUP_REPO_URL:-https://github.com/JulioC354R/ubuntu-setup.git}"
   local setup_dir="${SETUP_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/ubuntu-setup}"
   local theme="${SETUP_THEME:-catppuccin}" self_dir=""
 

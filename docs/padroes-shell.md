@@ -82,7 +82,7 @@ Chaves sempre pela URL oficial do fornecedor; nada de chave versionada no repo.
 ## 6. Bootstrap em uma linha
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<usuario>/ubuntu-setup/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/JulioC354R/ubuntu-setup/main/install.sh | bash
 ```
 
 - Todo o `install.sh` fica dentro de `main() { ...; }; main "$@"`. O bash só executa depois de

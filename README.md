@@ -6,7 +6,7 @@ dados pessoais no repositório e com uma interface que mostra o progresso sem de
 ## Instalação em uma linha
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<usuario>/ubuntu-setup/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/JulioC354R/ubuntu-setup/main/install.sh | bash
 ```
 
 Com tema:
