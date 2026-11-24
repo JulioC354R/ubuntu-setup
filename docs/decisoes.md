@@ -266,6 +266,16 @@ Removidas a pergunta inicial (usuário e e-mail do GitHub), a etapa de identidad
 ficam a cargo do usuário. Substitui a decisão 022 e a parte de identidade da 018.
 **Motivo:** pedido do usuário: etapa desnecessária no instalador.
 
+## 025 · 2026-11-24 · Fuxi-H3: saída analógica escondida
+O GNOME listava duas saídas do mesmo fone: "Saída digital (S/PDIF)" (a boa) e "Saída analógica" (a que só
+ajusta um lado). As duas vêm do conjunto de perfis padrão do PipeWire para placas USB. Agora o Fuxi-H3 usa um
+conjunto próprio, só com a saída digital e o microfone: `config/audio/fuxi-h3-profile-set.conf`, instalado em
+`/etc/alsa-card-profile/mixer/profile-sets/fuxi-h3.conf` e ligado ao receptor por `ENV{ACP_PROFILE_SET}` na
+regra udev `91-fuxi-h3.rules` (mesmo mecanismo do `90-pipewire-alsa.rules`; vale no PipeWire 1.0 do 24.04 e
+no 1.6 do 26.04). Os nomes dos perfis não mudam, então a regra do WirePlumber e o perfil memorizado seguem
+valendo. Com o fone conectado, a etapa reaplica o udev e reinicia o WirePlumber (o áudio para por ~2 s).
+**Motivo:** pedido do usuário: escolher a saída analógica por engano voltava o defeito de "só um lado".
+
 ---
 
 ## Em aberto

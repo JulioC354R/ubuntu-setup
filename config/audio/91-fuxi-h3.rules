@@ -1,4 +1,7 @@
-# Fuxi-H3 (receptor USB 040b:0897): volume interno (mixer "PCM") em 100% ao conectar.
-# O perfil IEC958 não controla esse mixer; se ele ficar em 0%, não sai som. O volume do
-# sistema continua ajustando os dois lados por software. Instalado pelo ubuntu-setup.
+# Fuxi-H3 (receptor USB 040b:0897). Instalado pelo ubuntu-setup.
+# 1) Volume interno (mixer "PCM") em 100% ao conectar. O perfil IEC958 não controla esse mixer; se ele
+#    ficar em 0%, não sai som. O volume do sistema continua ajustando os dois lados por software.
 ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", ATTRS{idVendor}=="040b", ATTRS{idProduct}=="0897", RUN+="/usr/bin/amixer -q -c $attr{device/number} sset PCM,0 100%% unmute", RUN+="/usr/bin/amixer -q -c $attr{device/number} sset PCM,1 100%% unmute"
+# 2) Só a saída digital no PipeWire: esconde a "Saída analógica" (que só ajusta um lado do volume).
+#    Mesmo mecanismo do 90-pipewire-alsa.rules; o arquivo fica em /etc/alsa-card-profile/mixer/profile-sets/.
+ACTION=="change", SUBSYSTEM=="sound", KERNEL=="card*", ATTRS{idVendor}=="040b", ATTRS{idProduct}=="0897", ENV{ACP_PROFILE_SET}="fuxi-h3.conf"
