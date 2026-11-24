@@ -1,0 +1,4 @@
+# Fuxi-H3 (receptor USB 040b:0897): volume interno (mixer "PCM") em 100% ao conectar.
+# O perfil IEC958 não controla esse mixer; se ele ficar em 0%, não sai som. O volume do
+# sistema continua ajustando os dois lados por software. Instalado pelo ubuntu-setup.
+ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", ATTRS{idVendor}=="040b", ATTRS{idProduct}=="0897", RUN+="/usr/bin/amixer -q -c $attr{device/number} sset PCM,0 100%% unmute", RUN+="/usr/bin/amixer -q -c $attr{device/number} sset PCM,1 100%% unmute"

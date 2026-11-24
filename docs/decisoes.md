@@ -243,6 +243,23 @@ no `curl | bash`). Enter aceita o sugerido: o valor atual do Git ou, numa máqui
 com aviso. Substitui a parte do `local.env` das decisões 001 e 018.
 **Motivo:** pedido do usuário: um arquivo a menos para preparar antes de rodar o setup.
 
+## 023 · 2026-11-23 · Correção do fone Fuxi-H3
+Fone com receptor USB (`040b:0897`, placa ALSA `FuxiH3`). Dois defeitos:
+- **Sem som:** o mixer interno do fone (`PCM`) ficava em 0%. No perfil IEC958 o PipeWire usa volume por software
+  e nunca mexe nesse mixer, então o volume do sistema aparecia em 54% e mesmo assim não saía nada.
+- **Só um lado:** no perfil "Analog Stereo", o PipeWire passa o volume para o mixer do fone, que só ajusta um
+  dos lados (a faixa de dB declarada é 0 a 0,39 dB).
+
+Correção (módulo `42-audio.sh`):
+- Perfil **"Digital Stereo (IEC958) + Mono Input"** (`output:iec958-stereo+input:mono-fallback`) como padrão, por
+  regra do WirePlumber 0.5 em `~/.config/wireplumber/wireplumber.conf.d/51-fuxi-h3.conf`. No 0.4 (24.04) a
+  regra não vale; o perfil é aplicado ao vivo se o fone estiver conectado, e o WirePlumber o memoriza.
+- Regra udev `/etc/udev/rules.d/91-fuxi-h3.rules`: põe `PCM,0` e `PCM,1` em 100% sempre que o receptor é
+  conectado. Os `RUN` rodam depois do `alsactl restore` do `90-alsa-restore.rules`, então o estado salvo não volta
+  a zerar o volume. O volume do sistema continua controlando os dois lados por igual.
+- Com o fone conectado durante o setup, aplica na hora. Sem ele, só instala as regras.
+**Motivo:** problema relatado pelo usuário; a solução do perfil IEC958 + Mono veio de um vídeo que ele indicou.
+
 ---
 
 ## Em aberto

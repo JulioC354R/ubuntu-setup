@@ -29,6 +29,7 @@ Para ver o que já está ok e o que falta, sem alterar nada: `./install.sh --dry
 | Desenvolvimento | Python 3 (venv, pip, pipx), Go, nvm + Node LTS, Bun, Rust, Docker + Compose (logs limitados a 10m × 3 por container), Claude Code |
 | Infraestrutura | Terraform, tflint, kubectl, Helm, kustomize, kind, Azure CLI, AWS CLI |
 | Aplicativos | Google Chrome, VS Code, Obsidian, Claude Desktop, OBS Studio, RustDesk, GParted, DBeaver |
+| Áudio | fone **Fuxi-H3** (receptor USB): perfil "Digital Stereo (IEC958) + Mono Input" e volume interno em 100% ao conectar (corrige "sem som" e "só um lado") |
 | Extensões do GNOME | Ajustes (Tweaks), Gerenciador de Extensões, dconf-editor; Blur my Shell, Vitals, Caffeine, Lilypad, Bluetooth Battery Meter, Open Bar + configs |
 | Aparência | fastfetch, ícones Papirus-Dark, cursor [Windows 11 Concept](assets/cursors/CREDITS.md) by jepriCreations (dark) |
 
