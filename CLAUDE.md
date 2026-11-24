@@ -29,8 +29,7 @@ Histórico de decisões: [docs/decisoes.md](docs/decisoes.md).
 
 3. **Sem dados pessoais ou sensíveis**
    - Proibido versionar: nome, e-mail, usuário, hostname, IPs internos, tokens, senhas, chaves SSH/GPG.
-   - Valores pessoais (usuário e e-mail do GitHub) são perguntados no início do `install.sh`, antes do plano,
-     com `ui_ask` (lê de `/dev/tty`), ou vêm de variáveis de ambiente. Nunca ficam gravados no repo.
+   - O setup não configura nem pede dados pessoais (nome/e-mail do Git ficam a cargo do usuário).
    - Logs ficam fora do repo (`~/.local/state/ubuntu-setup/logs/`) e caminhos exibidos usam `~`.
 
 4. **Erros não param a instalação**

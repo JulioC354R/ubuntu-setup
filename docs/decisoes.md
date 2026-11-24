@@ -260,6 +260,12 @@ Correção (módulo `42-audio.sh`):
 - Com o fone conectado durante o setup, aplica na hora. Sem ele, só instala as regras.
 **Motivo:** problema relatado pelo usuário; a solução do perfil IEC958 + Mono veio de um vídeo que ele indicou.
 
+## 024 · 2026-11-24 · Sem identidade do GitHub no setup
+Removidas a pergunta inicial (usuário e e-mail do GitHub), a etapa de identidade do Git e o `ui_ask`. O módulo
+`22-git.sh` fica só com a branch padrão `main` e a chave SSH (comentário `usuário@host`). Nome e e-mail do Git
+ficam a cargo do usuário. Substitui a decisão 022 e a parte de identidade da 018.
+**Motivo:** pedido do usuário: etapa desnecessária no instalador.
+
 ---
 
 ## Em aberto

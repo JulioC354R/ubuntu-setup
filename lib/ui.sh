@@ -201,24 +201,6 @@ ui_info()  { printf '  %s%s%s %s\n' "$C_INFO" "$T_ICON_INFO" "$C_RESET" "$*"; }
 ui_warn()  { printf '  %s%s %s%s\n' "$C_WARN" "!" "$*" "$C_RESET"; }
 ui_error() { printf '  %s%s %s%s\n' "$C_ERR" "$T_ICON_FAIL" "$*" "$C_RESET" >&2; }
 
-# ───────────────────────────── perguntas ────────────────────────────────────
-# Só antes do plano (as etapas nunca pedem input). Lê de /dev/tty: funciona no `curl | bash`.
-
-ui_can_ask() { { exec 3</dev/tty; } 2>/dev/null && exec 3<&-; }
-
-ui_ask() {  # variável "pergunta" [padrão] [regex] -> Enter aceita o padrão; vazio sem padrão = pular
-  local -n __ask_out=$1
-  local q=$2 def=${3:-} re=${4:-} ans tries=0
-  while (( tries++ < 3 )); do
-    printf '  %s?%s %s%s%s: ' "$C_ACCENT" "$C_RESET" "$q" "${def:+ ${C_MUTED}[$def]}" "$C_RESET" >/dev/tty
-    IFS= read -r ans </dev/tty || { printf '\n' >/dev/tty; __ask_out=""; return 1; }
-    ans=${ans:-$def}
-    if [[ -z "$ans" || -z "$re" || "$ans" =~ $re ]]; then __ask_out=$ans; return 0; fi
-    printf '    %sValor inválido, tente de novo.%s\n' "$C_WARN" "$C_RESET" >/dev/tty
-  done
-  __ask_out=""; return 1
-}
-
 ui_header() {
   local w line sub
   w=$(( UI_COLS - 4 )); (( w > 64 )) && w=64
