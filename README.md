@@ -5,19 +5,30 @@ dados pessoais no repositório e com uma interface que mostra o progresso sem de
 
 ## Instalação em uma linha
 
+Instala tudo direto do GitHub (clona o repo em `~/.local/share/ubuntu-setup` e roda o instalador):
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/JulioC354R/ubuntu-setup/main/install.sh | bash
 ```
 
-Com tema:
+Com outro tema:
 
 ```bash
-curl -fsSL .../install.sh | bash -s -- --theme nord
+curl -fsSL https://raw.githubusercontent.com/JulioC354R/ubuntu-setup/main/install.sh | bash -s -- --theme nord
 ```
 
-Ou a partir de um clone: `./install.sh --theme dracula`.
+Só verificar o que já está ok e o que falta, sem alterar nada:
 
-Para ver o que já está ok e o que falta, sem alterar nada: `./install.sh --dry-run`.
+```bash
+curl -fsSL https://raw.githubusercontent.com/JulioC354R/ubuntu-setup/main/install.sh | bash -s -- --dry-run
+```
+
+A partir de um clone:
+
+```bash
+git clone https://github.com/JulioC354R/ubuntu-setup.git
+cd ubuntu-setup && ./install.sh
+```
 
 ## O que é instalado
 
@@ -71,20 +82,10 @@ Código de saída: `0` tudo ok · `1` houve falhas · `130` interrompido.
 
 ## Dados pessoais
 
-Nada pessoal é versionado, e o instalador não pede dados pessoais. Nome e e-mail do Git ficam com você:
+Nada pessoal é versionado, e o instalador não pede nem configura dados pessoais.
 
-```bash
-git config --global user.name "seu-usuario"
-git config --global user.email "voce@example.com"
-```
-
-A chave SSH (`~/.ssh/id_ed25519`) é criada **sem senha**, porque a instalação não pode parar no meio. Depois:
-
-```bash
-ssh-keygen -p -f ~/.ssh/id_ed25519                       # pôr uma senha (opcional)
-gh auth refresh -s admin:public_key                       # permissão para enviar chaves
-gh ssh-key add ~/.ssh/id_ed25519.pub -t "$(hostname)"     # cadastrar no GitHub
-```
+A chave SSH (`~/.ssh/id_ed25519`) é criada **sem senha**, porque a instalação não pode parar no meio.
+Para pôr uma senha depois: `ssh-keygen -p -f ~/.ssh/id_ed25519`.
 
 ## Desenvolvimento
 
